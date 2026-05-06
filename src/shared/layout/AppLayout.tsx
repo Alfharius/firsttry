@@ -11,8 +11,8 @@ import profileActiveIcon from '../../assets/profile-active.svg'
 const links = [
   { to: '/current', label: 'Мероприятия сегодня', icon: currentIcon, activeIcon: currentActiveIcon },
   { to: '/upcoming', label: 'Ближайшие мероприятия', icon: upcomingIcon, activeIcon: upcomingActiveIcon },
-  { to: '/reports', label: 'Статистика', icon: reportsIcon, activeIcon: reportsActiveIcon },
-  { to: '/profile', label: 'Профиль', icon: profileIcon, activeIcon: profileActiveIcon },
+  { to: '/reports', label: 'Статистика мероприятий', icon: reportsIcon, activeIcon: reportsActiveIcon },
+  { to: '/profile', label: 'Информация пользователя', icon: profileIcon, activeIcon: profileActiveIcon },
 ]
 
 export function AppLayout() {

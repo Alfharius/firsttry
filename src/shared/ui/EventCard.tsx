@@ -16,7 +16,7 @@ export function EventCard({ event, onOpenDetails }: EventCardProps) {
   )
 
   return (
-    <article className="overflow-hidden rounded-xl border border-slate-300 bg-slate-100/80">
+    <div className="overflow-hidden rounded-xl border border-slate-300 bg-slate-100/80">
       <div className="flex flex-col gap-3 p-2 md:flex-row md:gap-4 md:p-3">
         <img
           src={event.imageUrl}
@@ -74,6 +74,6 @@ export function EventCard({ event, onOpenDetails }: EventCardProps) {
       >
         Открыть детали мероприятия
       </button>
-    </article>
+    </div>
   )
 }

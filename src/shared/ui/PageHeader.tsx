@@ -5,8 +5,8 @@ interface PageHeaderProps {
 
 export function PageHeader({ title }: PageHeaderProps) {
   return (
-    <header className="mb-6">
-      <h2 className="text-2xl font-semibold text-slate-900">{title}</h2>
-    </header>
+    <div className="mb-6 text-2xl font-semibold text-slate-900">
+      {title}
+    </div>
   )
 }
