@@ -16,7 +16,7 @@ export function ReportsPage() {
     useEventFilters(data, 'reports')
 
   return (
-    <section className="space-y-6">
+    <section className="flex flex-col gap-4">
       <PageHeader
         title="Отчеты"
         description="Прошедшие мероприятия в виде таблицы и карточек."

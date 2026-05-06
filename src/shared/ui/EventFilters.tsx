@@ -18,7 +18,7 @@ export function EventFilters({
   onClear,
 }: EventFiltersProps) {
   return (
-    <section className="mb-5 space-y-3 rounded-xl border border-slate-200 bg-white p-4">
+    <section className="space-y-3 rounded-xl border border-slate-200 bg-white p-4">
       <div className="grid gap-3 md:grid-cols-3 xl:grid-cols-6">
         <input
           value={filters.q}

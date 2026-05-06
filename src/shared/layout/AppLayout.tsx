@@ -28,13 +28,13 @@ export function AppLayout() {
       </div>
 
       <nav className="fixed bottom-4 left-1/2 z-30 w-[min(600px,92vw)] -translate-x-1/2 rounded-3xl border border-slate-300 bg-slate-100/95 p-1 shadow-sm backdrop-blur">
-        <ul className="grid grid-cols-4 gap-1">
+        <ul className="flex gap-1">
           {links.map((link) => (
-            <li key={link.to}>
+            <li key={link.to} className='flex-1'>
               <NavLink
                 to={link.to}
                 className={({ isActive }) =>
-                  `flex h-20 flex-col items-center justify-center rounded-3xl text-lg transition ${
+                  `flex h-10 sm:h-20 flex-col items-center justify-center rounded-3xl transition ${
                     isActive ? 'bg-blue-500 text-slate-900' : 'text-slate-400 hover:text-slate-600'
                   }`
                 }
@@ -47,7 +47,7 @@ export function AppLayout() {
                       className="mb-1 h-6 w-6"
                       aria-hidden="true"
                     />
-                    <span>{link.label}</span>
+                    <span className='max-sm:hidden text-center'>{link.label}</span>
                   </>
                 )}
               </NavLink>
