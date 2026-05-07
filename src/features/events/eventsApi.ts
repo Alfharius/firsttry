@@ -27,8 +27,10 @@ interface ParticipantRow {
 }
 
 function toEventType(type: string): EventType {
-  if (type === 'Conference' || type === 'Workshop' || type === 'Meetup') return type
-  return 'Meetup'
+  if (type === 'Конференция' || type === 'Conference') return 'Конференция'
+  if (type === 'Мастер-класс' || type === 'Workshop') return 'Мастер-класс'
+  if (type === 'Встреча' || type === 'Meetup') return 'Встреча'
+  return 'Встреча'
 }
 
 function mapParticipant(row: ParticipantRow): Participant {

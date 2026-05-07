@@ -3,17 +3,22 @@ import type { EventEntity } from '../../types/domain'
 interface EventCardProps {
   event: EventEntity
   onOpenDetails: (event: EventEntity) => void
+  showDaysUntilStart?: boolean
 }
 
 function formatMoney(value: number) {
   return new Intl.NumberFormat('ru-RU').format(value)
 }
 
-export function EventCard({ event, onOpenDetails }: EventCardProps) {
-  const startsInDays = Math.max(
-    0,
-    Math.ceil((new Date(event.startAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24)),
-  )
+export function EventCard({
+  event,
+  onOpenDetails,
+  showDaysUntilStart = true,
+}: EventCardProps) {
+  const now = Date.now()
+  const startMs = new Date(event.startAt).getTime()
+  const startsInDays = Math.ceil((startMs - now) / (1000 * 60 * 60 * 24))
+  const shouldShowDaysBadge = showDaysUntilStart && startMs > now && startsInDays > 0
 
   return (
     <div className="overflow-hidden rounded-xl border border-slate-300 bg-slate-100/80">
@@ -26,7 +31,9 @@ export function EventCard({ event, onOpenDetails }: EventCardProps) {
         <div className="flex-1 space-y-3 py-1">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-2xl font-medium leading-tight text-slate-900">{event.title}</h3>
-            <p className="shrink-0 text-sm text-slate-700">{startsInDays} дней до начала</p>
+            {shouldShowDaysBadge && (
+              <p className="shrink-0 text-sm text-slate-700">{startsInDays} дней до начала</p>
+            )}
           </div>
 
           <div className="grid gap-x-6 gap-y-2 text-sm md:grid-cols-3">

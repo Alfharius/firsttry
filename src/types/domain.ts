@@ -1,4 +1,4 @@
-export type EventType = 'Conference' | 'Workshop' | 'Meetup'
+export type EventType = 'Конференция' | 'Мастер-класс' | 'Встреча'
 
 export interface Participant {
   id: string

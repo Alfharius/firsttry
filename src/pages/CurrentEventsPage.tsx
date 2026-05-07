@@ -29,7 +29,12 @@ export function CurrentEventsPage() {
       />
       <div className="space-y-2">
         {filtered.map((event) => (
-          <EventCard key={event.id} event={event} onOpenDetails={setSelected} />
+          <EventCard
+            key={event.id}
+            event={event}
+            onOpenDetails={setSelected}
+            showDaysUntilStart={false}
+          />
         ))}
       </div>
       {!filtered.length && (
