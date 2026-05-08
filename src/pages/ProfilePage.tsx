@@ -9,7 +9,7 @@ import {
   updateCurrentProfile,
 } from '../features/profile/profileApi'
 import { PageHeader } from '../shared/ui/PageHeader'
-import { useAuth } from '../features/auth/AuthContext'
+import { useAuth } from '../features/auth/useAuth'
 
 const profileSchema = z.object({
   fullName: z.string().min(2, 'Введите имя'),

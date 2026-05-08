@@ -8,7 +8,7 @@ import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
 import { ResetPasswordPage } from './pages/ResetPasswordPage'
 import { ProtectedRoute } from './features/auth/ProtectedRoute'
-import { useAuth } from './features/auth/AuthContext'
+import { useAuth } from './features/auth/useAuth'
 
 function App() {
   const { session } = useAuth()

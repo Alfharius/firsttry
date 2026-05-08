@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { EventEntity } from '../../types/domain'
 
 interface EventCardProps {
@@ -15,7 +16,7 @@ export function EventCard({
   onOpenDetails,
   showDaysUntilStart = true,
 }: EventCardProps) {
-  const now = Date.now()
+  const [now] = useState(() => Date.now())
   const startMs = new Date(event.startAt).getTime()
   const startsInDays = Math.ceil((startMs - now) / (1000 * 60 * 60 * 24))
   const shouldShowDaysBadge = showDaysUntilStart && startMs > now && startsInDays > 0
