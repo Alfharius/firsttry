@@ -4,8 +4,9 @@ create extension if not exists "pgcrypto";
 create table if not exists public.events (
   id uuid primary key default gen_random_uuid(),
   title text not null,
-  type text not null check (type in ('Conference', 'Workshop', 'Meetup')),
+  type text not null check (type in ('Конференция', 'Мастер-класс', 'Встреча', 'Conference', 'Workshop', 'Meetup')),
   category text not null,
+  organizer_name text not null default '',
   location text not null,
   participants_count integer not null default 0,
   start_at timestamptz not null,

@@ -1,4 +1,4 @@
-import { hasSupabaseConfig, supabase } from '../../lib/supabase'
+import { supabase } from '../../lib/supabase'
 import type { EventEntity, EventType, Participant } from '../../types/domain'
 import { mockEvents } from './mockEvents'
 
@@ -7,6 +7,7 @@ interface EventRow {
   title: string
   type: string
   category: string
+  organizer_name: string | null
   location: string
   participants_count: number
   start_at: string
@@ -14,7 +15,7 @@ interface EventRow {
   price_without_vat: number
   vat: number
   price_with_vat: number
-  estimate: string
+  estimate: string | null
   extra_services: string[] | null
   image_url: string | null
   event_participants: { participant: ParticipantRow[] | null }[]
@@ -51,6 +52,7 @@ function mapEvent(row: EventRow): EventEntity {
     title: row.title,
     type: toEventType(row.type),
     category: row.category,
+    organizerName: row.organizer_name?.trim() || row.location,
     location: row.location,
     participantsCount: row.participants_count,
     startAt: row.start_at,
@@ -58,7 +60,7 @@ function mapEvent(row: EventRow): EventEntity {
     priceWithoutVat: row.price_without_vat,
     vat: row.vat,
     priceWithVat: row.price_with_vat,
-    estimate: row.estimate,
+    estimateNote: row.estimate?.trim() || undefined,
     extraServices: row.extra_services ?? [],
     imageUrl:
       row.image_url ??
@@ -68,7 +70,7 @@ function mapEvent(row: EventRow): EventEntity {
 }
 
 export async function fetchEvents() {
-  if (!hasSupabaseConfig || !supabase) return mockEvents
+  if (!supabase) return mockEvents
 
   const { data, error } = await supabase
     .from('events')
@@ -78,6 +80,7 @@ export async function fetchEvents() {
         title,
         type,
         category,
+        organizer_name,
         location,
         participants_count,
         start_at,

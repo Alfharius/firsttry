@@ -1,4 +1,4 @@
-import { hasSupabaseConfig, supabase } from '../../lib/supabase'
+import { supabase } from '../../lib/supabase'
 import type { UserProfile } from '../../types/domain'
 
 const fallbackProfile: UserProfile = {
@@ -13,7 +13,7 @@ interface ProfileRow {
 }
 
 export async function fetchCurrentProfile() {
-  if (!hasSupabaseConfig || !supabase) return fallbackProfile
+  if (!supabase) return fallbackProfile
 
   const {
     data: { user },
@@ -45,7 +45,7 @@ export async function fetchCurrentProfile() {
 }
 
 export async function updateCurrentProfile(profile: UserProfile) {
-  if (!hasSupabaseConfig || !supabase) return
+  if (!supabase) return
 
   const {
     data: { user },
@@ -68,7 +68,7 @@ export async function updateCurrentProfile(profile: UserProfile) {
 }
 
 export async function changeCurrentUserPassword(newPassword: string) {
-  if (!hasSupabaseConfig || !supabase) return
+  if (!supabase) return
 
   const { error } = await supabase.auth.updateUser({ password: newPassword })
   if (error) {

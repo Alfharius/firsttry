@@ -1,4 +1,4 @@
-import type { EventEntity } from '../../types/domain';
+import type { EventEntity } from '../../types/domain'
 
 export const mockEvents: EventEntity[] = [
   {
@@ -6,6 +6,7 @@ export const mockEvents: EventEntity[] = [
     title: 'Форум цифровых продуктов',
     type: 'Конференция',
     category: 'ИТ',
+    organizerName: 'ТОО «Алматы Экспо Центр»',
     location: 'Выставочный центр Алматы Экспо',
     participantsCount: 240,
     startAt: '2026-05-06T09:00:00.000Z',
@@ -13,7 +14,7 @@ export const mockEvents: EventEntity[] = [
     priceWithoutVat: 1200000,
     vat: 144000,
     priceWithVat: 1344000,
-    estimate: 'Главная сцена, брендинг, 5 спикеров, кофе-брейки.',
+    estimateNote: 'Главная сцена, брендинг, 5 спикеров, кофе-брейки.',
     extraServices: ['Фотосъемка', 'Видео съемка'],
     imageUrl:
       'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=80',
@@ -28,6 +29,7 @@ export const mockEvents: EventEntity[] = [
     title: 'Встреча по подбору frontend-разработчиков',
     type: 'Встреча',
     category: 'HR',
+    organizerName: 'Astana Hub',
     location: 'Astana Hub',
     participantsCount: 80,
     startAt: '2026-05-15T14:00:00.000Z',
@@ -35,7 +37,7 @@ export const mockEvents: EventEntity[] = [
     priceWithoutVat: 320000,
     vat: 38400,
     priceWithVat: 358400,
-    estimate: 'Малая сцена, зона нетворкинга, подарки участникам.',
+    estimateNote: 'Малая сцена, зона нетворкинга, подарки участникам.',
     extraServices: ['Прямая трансляция'],
     imageUrl:
       'https://images.unsplash.com/photo-1559223607-a43c990c692c?auto=format&fit=crop&w=1200&q=80',
@@ -49,6 +51,7 @@ export const mockEvents: EventEntity[] = [
     title: 'Мастерская Design Ops',
     type: 'Мастер-класс',
     category: 'Дизайн',
+    organizerName: 'ИП Керимбаева А.',
     location: 'Творческая лаборатория Шымкента',
     participantsCount: 34,
     startAt: '2026-04-21T10:00:00.000Z',
@@ -56,7 +59,7 @@ export const mockEvents: EventEntity[] = [
     priceWithoutVat: 210000,
     vat: 25200,
     priceWithVat: 235200,
-    estimate: '2 тренера, учебные материалы, обед.',
+    estimateNote: '2 тренера, учебные материалы, обед.',
     extraServices: ['Сертификаты'],
     imageUrl:
       'https://images.unsplash.com/photo-1515169067868-5387ec356754?auto=format&fit=crop&w=1200&q=80',
@@ -70,6 +73,7 @@ export const mockEvents: EventEntity[] = [
     title: 'Мастерская Design Ops',
     type: 'Мастер-класс',
     category: 'Дизайн',
+    organizerName: 'ИП Керимбаева А.',
     location: 'Творческая лаборатория Шымкента',
     participantsCount: 34,
     startAt: '2026-05-06T10:00:00.000Z',
@@ -77,7 +81,7 @@ export const mockEvents: EventEntity[] = [
     priceWithoutVat: 210000,
     vat: 25200,
     priceWithVat: 235200,
-    estimate: '2 тренера, учебные материалы, обед.',
+    estimateNote: '2 тренера, учебные материалы, обед.',
     extraServices: ['Сертификаты'],
     imageUrl:
       'https://images.unsplash.com/photo-1515169067868-5387ec356754?auto=format&fit=crop&w=1200&q=80',
@@ -86,4 +90,4 @@ export const mockEvents: EventEntity[] = [
       { id: 'p-7', fullName: 'Бауыржан Ильясов', specialization: 'Дизайнер' },
     ],
   },
-];
+]

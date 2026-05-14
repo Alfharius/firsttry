@@ -11,6 +11,8 @@ export interface EventEntity {
   title: string
   type: EventType
   category: string
+  /** Организатор / площадка — основная статья сметы */
+  organizerName: string
   location: string
   participantsCount: number
   startAt: string
@@ -18,7 +20,8 @@ export interface EventEntity {
   priceWithoutVat: number
   vat: number
   priceWithVat: number
-  estimate: string
+  /** Текстовое описание зон/формата (опционально, под сметой) */
+  estimateNote?: string
   extraServices: string[]
   imageUrl: string
   participants: Participant[]

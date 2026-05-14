@@ -1,5 +1,5 @@
 import type { Session } from '@supabase/supabase-js'
-import { hasSupabaseConfig, supabase } from '../../lib/supabase'
+import { supabase, useMockAuth } from '../../lib/supabase'
 
 const MOCK_USERS_KEY = 'mock_auth_users'
 const MOCK_SESSION_KEY = 'mock_auth_session'
@@ -65,7 +65,7 @@ function saveMockSession(session: Session | null) {
 }
 
 export async function getCurrentSession() {
-  if (!hasSupabaseConfig || !supabase) return readMockSession()
+  if (useMockAuth || !supabase) return readMockSession()
   const { data, error } = await supabase.auth.getSession()
   if (error) throw new Error(error.message)
   return data.session
@@ -74,7 +74,7 @@ export async function getCurrentSession() {
 export function onAuthStateChange(
   callback: (session: Session | null) => void,
 ) {
-  if (!hasSupabaseConfig || !supabase) {
+  if (useMockAuth || !supabase) {
     mockListeners.add(callback)
     return () => mockListeners.delete(callback)
   }
@@ -86,7 +86,7 @@ export function onAuthStateChange(
 }
 
 export async function signIn(email: string, password: string) {
-  if (!hasSupabaseConfig || !supabase) {
+  if (useMockAuth || !supabase) {
     const users = readMockUsers()
     const user = users.find((item) => item.email.toLowerCase() === email.toLowerCase())
     if (!user || user.password !== password) {
@@ -100,7 +100,7 @@ export async function signIn(email: string, password: string) {
 }
 
 export async function signUp(email: string, password: string, fullName: string) {
-  if (!hasSupabaseConfig || !supabase) {
+  if (useMockAuth || !supabase) {
     const users = readMockUsers()
     const exists = users.some((item) => item.email.toLowerCase() === email.toLowerCase())
     if (exists) throw new Error('Пользователь с таким email уже существует')
@@ -127,7 +127,7 @@ export async function signUp(email: string, password: string, fullName: string) 
 }
 
 export async function resetPassword(email: string) {
-  if (!hasSupabaseConfig || !supabase) {
+  if (useMockAuth || !supabase) {
     const users = readMockUsers()
     const exists = users.some((item) => item.email.toLowerCase() === email.toLowerCase())
     if (!exists) throw new Error('Пользователь с таким email не найден')
@@ -138,7 +138,7 @@ export async function resetPassword(email: string) {
 }
 
 export async function signOut() {
-  if (!hasSupabaseConfig || !supabase) {
+  if (useMockAuth || !supabase) {
     saveMockSession(null)
     return
   }

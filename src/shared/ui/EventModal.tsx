@@ -1,4 +1,7 @@
+import { useMemo } from 'react'
 import type { EventEntity } from '../../types/domain'
+import { buildEstimateRows } from '../lib/estimate'
+import { EventEstimateTable } from './EventEstimateTable'
 
 interface EventModalProps {
   event: EventEntity | null
@@ -7,6 +10,8 @@ interface EventModalProps {
 
 export function EventModal({ event, onClose }: EventModalProps) {
   if (!event) return null
+
+  const estimateRows = useMemo(() => buildEstimateRows(event), [event])
 
   const participantsBySpec = event.participants.reduce<Record<string, number>>(
     (acc, participant) => {
@@ -30,24 +35,22 @@ export function EventModal({ event, onClose }: EventModalProps) {
           </button>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-4 md:grid-cols-2">
           <div className="space-y-2 text-sm text-slate-700">
             <p>Тип: {event.type}</p>
             <p>Категория: {event.category}</p>
+            <p>Организатор: {event.organizerName}</p>
             <p>Место: {event.location}</p>
             <p>Участников: {event.participantsCount}</p>
-            <p>Смета: {event.estimate}</p>
           </div>
-          <div>
-            <h4 className="mb-2 text-sm font-semibold uppercase text-slate-700">
-              Дополнительные услуги
-            </h4>
-            <ul className="list-disc space-y-1 pl-4 text-sm text-slate-700">
-              {event.extraServices.map((service) => (
-                <li key={service}>{service}</li>
-              ))}
-            </ul>
-          </div>
+        </div>
+
+        <div className="mt-6">
+          <h4 className="mb-2 text-sm font-semibold text-slate-900">Смета</h4>
+          <EventEstimateTable rows={estimateRows} />
+          {event.estimateNote && (
+            <p className="mt-3 text-sm text-slate-600">Комментарий: {event.estimateNote}</p>
+          )}
         </div>
 
         <div className="mt-6">
