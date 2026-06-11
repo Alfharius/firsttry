@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import type { EventEntity } from '../../types/domain'
 import { buildEstimateRows } from '../lib/estimate'
+import { peopleWord } from '../lib/peopleWord'
 import { EventEstimateTable } from './EventEstimateTable'
 
 interface EventCardProps {
@@ -50,7 +51,9 @@ export function EventCard({
             <p />
 
             <p className="text-xl text-slate-800">Число участников</p>
-            <p className="text-xl text-slate-800">{event.participantsCount} человека</p>
+            <p className="text-xl text-slate-800">
+              {event.participantsCount} {peopleWord(event.participantsCount)}
+            </p>
             <p />
           </div>
 

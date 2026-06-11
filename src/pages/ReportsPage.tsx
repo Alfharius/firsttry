@@ -22,14 +22,14 @@ export function ReportsPage() {
 
   const tabs: { id: ReportsTab; label: string }[] = [
     { id: 'data', label: 'Таблица и карточки' },
-    { id: 'chart', label: 'График затрат' },
+    { id: 'chart', label: 'Графики' },
   ]
 
   return (
     <section className="flex flex-col gap-4">
       <PageHeader
         title="Отчеты"
-        description="Прошедшие мероприятия: таблица, карточки и график затрат по месяцам."
+        description="Прошедшие мероприятия: таблица, карточки и графики по месяцам."
       />
       <EventFilters
         filters={filters}
