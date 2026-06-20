@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useEvents } from '../features/events/useEvents'
 import { useEventFilters } from '../features/events/useEventFilters'
+import { exportReportsToExcel } from '../features/reports/exportReportsToExcel'
 import type { EventEntity } from '../types/domain'
 import { EventCard } from '../shared/ui/EventCard'
 import { EventModal } from '../shared/ui/EventModal'
@@ -27,10 +28,20 @@ export function ReportsPage() {
 
   return (
     <section className="flex flex-col gap-4">
-      <PageHeader
-        title="Отчеты"
-        description="Прошедшие мероприятия: таблица, карточки и графики по месяцам."
-      />
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <PageHeader
+          title="Отчеты"
+          description="Прошедшие мероприятия: таблица, карточки и графики по месяцам."
+        />
+        <button
+          type="button"
+          disabled={filtered.length === 0}
+          onClick={() => exportReportsToExcel(filtered)}
+          className="shrink-0 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+        >
+          Выгрузить в Excel
+        </button>
+      </div>
       <EventFilters
         filters={filters}
         activeFilters={activeFilters}
@@ -63,9 +74,18 @@ export function ReportsPage() {
           <ReportsTable events={filtered} onRowClick={setSelectedFromTable} />
           {selectedFromTable && (
             <div className="space-y-2 rounded-xl border border-slate-300 bg-white p-3">
-              <p className="text-sm font-medium text-slate-600">
-                Выбранное мероприятие из статистики
-              </p>
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-sm font-medium text-slate-600">
+                  Выбранное мероприятие из статистики
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setSelectedFromTable(null)}
+                  className="rounded-md bg-slate-100 px-3 py-1.5 text-sm text-slate-700 transition hover:bg-slate-200"
+                >
+                  Сбросить
+                </button>
+              </div>
               <EventCard event={selectedFromTable} onOpenDetails={setSelected} />
             </div>
           )}
