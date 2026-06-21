@@ -65,7 +65,8 @@ export function ProfilePage() {
   })
 
   const passwordMutation = useMutation({
-    mutationFn: changeCurrentUserPassword,
+    mutationFn: ({ currentPassword, newPassword }: { currentPassword: string; newPassword: string }) =>
+      changeCurrentUserPassword(currentPassword, newPassword),
     onSuccess: () => {
       setPasswordMessage('Пароль успешно изменен')
       passwordForm.reset()
@@ -77,12 +78,28 @@ export function ProfilePage() {
   
   const { logout } = useAuth()
 
+  const roleLabel =
+    profileQuery.data?.role === 'manager' ? 'Менеджер' : 'Пользователь компании'
+
   return (
     <section className="space-y-8">
       <PageHeader
         title="Профиль пользователя"
         description="Редактирование основной информации и смена пароля."
       />
+
+      <div className="grid gap-3 rounded-xl border border-slate-200 bg-white p-5">
+        <h3 className="text-lg font-semibold">Роль и компания</h3>
+        <p className="text-sm text-slate-700">
+          <span className="font-medium">Роль:</span> {profileQuery.isLoading ? '...' : roleLabel}
+        </p>
+        <p className="text-sm text-slate-700">
+          <span className="font-medium">Компания:</span>{' '}
+          {profileQuery.isLoading
+            ? '...'
+            : profileQuery.data?.company?.name ?? '—'}
+        </p>
+      </div>
 
       <form
         className="grid gap-4 rounded-xl border border-slate-200 bg-white p-5"
@@ -130,7 +147,10 @@ export function ProfilePage() {
         className="grid gap-4 rounded-xl border border-slate-200 bg-white p-5"
         onSubmit={passwordForm.handleSubmit((values) => {
           setPasswordMessage('')
-          passwordMutation.mutate(values.newPassword)
+          passwordMutation.mutate({
+            currentPassword: values.currentPassword,
+            newPassword: values.newPassword,
+          })
         })}
       >
         <h3 className="text-lg font-semibold">Смена пароля</h3>

@@ -1,4 +1,5 @@
-import type { EventEntity } from '../../types/domain'
+import type { EstimateItem, EventEntity } from '../../types/domain'
+import { calcVatFromNet, roundMoney } from './vat'
 
 export interface EstimateRow {
   name: string
@@ -23,13 +24,33 @@ function splitInt(total: number, weights: number[]): number[] {
   return parts
 }
 
+export function buildEstimateRowsFromItems(items: Pick<EstimateItem, 'name' | 'netto'>[]): EstimateRow[] {
+  return items.map((item) => {
+    const netto = roundMoney(item.netto)
+    const vat = calcVatFromNet(netto)
+    return {
+      name: item.name,
+      netto,
+      vat,
+      withVat: roundMoney(netto + vat),
+    }
+  })
+}
+
 /**
- * Смета: основная статья — организация мероприятия; остальные строки — доп. услуги.
- * Итоги по столбцам совпадают с priceWithoutVat, vat, priceWithVat на карточке.
+ * Смета: при наличии estimateItems — из сохранённых позиций,
+ * иначе — распределение по организатору и доп. услугам (legacy).
  */
 export function buildEstimateRows(
-  event: Pick<EventEntity, 'priceWithoutVat' | 'vat' | 'priceWithVat' | 'organizerName' | 'extraServices'>,
+  event: Pick<
+    EventEntity,
+    'priceWithoutVat' | 'vat' | 'priceWithVat' | 'organizerName' | 'extraServices' | 'estimateItems'
+  >,
 ): EstimateRow[] {
+  if (event.estimateItems?.length) {
+    return buildEstimateRowsFromItems(event.estimateItems)
+  }
+
   const { priceWithoutVat: Tn, vat: Tv, organizerName, extraServices } = event
   const k = extraServices.length
 
@@ -39,12 +60,11 @@ export function buildEstimateRows(
         name: `Организация мероприятия: ${organizerName}`,
         netto: Tn,
         vat: Tv,
-        withVat: Tn + Tv,
+        withVat: roundMoney(Tn + Tv),
       },
     ]
   }
 
-  // Организация ~60%, каждая услуга — равная доля от оставшихся 40%
   const orgWeight = 0.6
   const perServiceWeight = 0.4 / k
   const weights = [orgWeight, ...Array(k).fill(perServiceWeight)]
@@ -57,14 +77,14 @@ export function buildEstimateRows(
     name: `Организация мероприятия: ${organizerName}`,
     netto: nettos[0],
     vat: vats[0],
-    withVat: nettos[0] + vats[0],
+    withVat: roundMoney(nettos[0] + vats[0]),
   })
   for (let i = 0; i < k; i++) {
     rows.push({
       name: extraServices[i],
       netto: nettos[i + 1],
       vat: vats[i + 1],
-      withVat: nettos[i + 1] + vats[i + 1],
+      withVat: roundMoney(nettos[i + 1] + vats[i + 1]),
     })
   }
   return rows
@@ -72,7 +92,7 @@ export function buildEstimateRows(
 
 export function formatRub(value: number) {
   return new Intl.NumberFormat('ru-RU', {
-    minimumFractionDigits: 0,
+    minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(value)
 }

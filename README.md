@@ -1,73 +1,55 @@
-# React + TypeScript + Vite
+# Events Manager
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React SPA + Laravel API + PostgreSQL.
 
-Currently, two official plugins are available:
+## Структура
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+diploma/
+  firsttry/       # фронтенд (React + Vite)
+  firsttry-api/   # backend (Laravel + Sanctum)
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Требования
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- Node.js 20.19+ или 22.12+ (`nvm use` в `firsttry`)
+- PHP 8.2+ с расширениями `pgsql`, `mbstring`, `openssl`
+- Composer
+- Docker (для PostgreSQL)
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Backend
+
+```bash
+cd firsttry-api
+./start.sh
+# первый раз с пустой БД: docker compose exec api php artisan db:seed
 ```
+
+API: http://localhost:8000/api
+
+Тестовые пользователи:
+- Менеджер: `aruzhan@events.kz` / `password`
+- Клиент: `client@events.kz` / `password`
+
+## Frontend
+
+```bash
+cd firsttry
+nvm use
+npm install
+cp .env.example .env
+npm run dev
+```
+
+Приложение: http://localhost:5173/
+
+Vite проксирует `/api` на `http://localhost:8000`.
+
+На Linux выполняйте `npm install` локально — не копируйте `node_modules` с Windows.
+
+## Проверка
+
+1. Войти как `aruzhan@events.kz`
+2. Страницы `/current`, `/upcoming`, `/reports` показывают 4 события из Postgres
+3. Профиль сохраняется, смена пароля работает
+4. Excel-выгрузка на странице отчётов

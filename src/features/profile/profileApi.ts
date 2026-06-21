@@ -1,77 +1,37 @@
-import { supabase } from '../../lib/supabase'
+import { apiRequest, getApiUrl } from '../../lib/apiClient'
 import type { UserProfile } from '../../types/domain'
 
 const fallbackProfile: UserProfile = {
   fullName: 'Aruzhan Omarova',
   email: 'aruzhan@events.kz',
   position: 'Event Manager',
+  role: 'manager',
+  company: null,
 }
 
-interface ProfileRow {
-  full_name: string
-  position: string
+export async function fetchCurrentProfile(): Promise<UserProfile> {
+  if (!getApiUrl()) return fallbackProfile
+
+  return apiRequest<UserProfile>('/profile')
 }
 
-export async function fetchCurrentProfile() {
-  if (!supabase) return fallbackProfile
+export async function updateCurrentProfile(profile: Pick<UserProfile, 'fullName' | 'position'>) {
+  if (!getApiUrl()) return
 
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser()
-
-  if (userError || !user) return fallbackProfile
-
-  const { data, error } = await supabase
-    .from('profiles')
-    .select('full_name, position')
-    .eq('id', user.id)
-    .single()
-
-  if (error || !data) {
-    return {
-      fullName: user.user_metadata?.full_name ?? fallbackProfile.fullName,
-      email: user.email ?? fallbackProfile.email,
-      position: fallbackProfile.position,
-    }
-  }
-
-  const profile = data as ProfileRow
-  return {
-    fullName: profile.full_name,
-    email: user.email ?? fallbackProfile.email,
-    position: profile.position,
-  }
-}
-
-export async function updateCurrentProfile(profile: UserProfile) {
-  if (!supabase) return
-
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser()
-
-  if (userError || !user) {
-    throw new Error('Пользователь не авторизован')
-  }
-
-  const { error } = await supabase.from('profiles').upsert({
-    id: user.id,
-    full_name: profile.fullName,
-    position: profile.position,
+  await apiRequest<UserProfile>('/profile', {
+    method: 'PUT',
+    body: {
+      fullName: profile.fullName,
+      position: profile.position,
+    },
   })
-
-  if (error) {
-    throw new Error(`Не удалось сохранить профиль: ${error.message}`)
-  }
 }
 
-export async function changeCurrentUserPassword(newPassword: string) {
-  if (!supabase) return
+export async function changeCurrentUserPassword(currentPassword: string, newPassword: string) {
+  if (!getApiUrl()) return
 
-  const { error } = await supabase.auth.updateUser({ password: newPassword })
-  if (error) {
-    throw new Error(`Не удалось сменить пароль: ${error.message}`)
-  }
+  await apiRequest('/auth/password', {
+    method: 'PUT',
+    body: { currentPassword, newPassword },
+  })
 }

@@ -9,3 +9,13 @@ body {
 #root {
   @apply min-h-screen;
 }
+
+@layer components {
+  .app-select option {
+    @apply bg-white py-2 text-slate-900;
+  }
+
+  .app-select option:checked {
+    @apply bg-blue-50 font-medium text-blue-800;
+  }
+}

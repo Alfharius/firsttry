@@ -1,4 +1,5 @@
 import type { EventFiltersState } from '../../features/events/useEventFilters'
+import { Select } from './Select'
 
 interface EventFiltersProps {
   filters: EventFiltersState
@@ -26,22 +27,17 @@ export function EventFilters({
           placeholder="Поиск по названию"
           className="rounded-lg border border-slate-300 px-3 py-2 text-sm"
         />
-        <select
-          value={filters.type}
-          onChange={(event) => onChange('type', event.target.value)}
-          className="rounded-lg border border-slate-300 px-3 py-2 text-sm"
-        >
+        <Select value={filters.type} onChange={(event) => onChange('type', event.target.value)}>
           <option value="">Все типы</option>
           {options.types.map((type) => (
             <option key={type} value={type}>
               {type}
             </option>
           ))}
-        </select>
-        <select
+        </Select>
+        <Select
           value={filters.category}
           onChange={(event) => onChange('category', event.target.value)}
-          className="rounded-lg border border-slate-300 px-3 py-2 text-sm"
         >
           <option value="">Все категории</option>
           {options.categories.map((category) => (
@@ -49,11 +45,10 @@ export function EventFilters({
               {category}
             </option>
           ))}
-        </select>
-        <select
+        </Select>
+        <Select
           value={filters.location}
           onChange={(event) => onChange('location', event.target.value)}
-          className="rounded-lg border border-slate-300 px-3 py-2 text-sm"
         >
           <option value="">Все площадки</option>
           {options.locations.map((location) => (
@@ -61,7 +56,7 @@ export function EventFilters({
               {location}
             </option>
           ))}
-        </select>
+        </Select>
         <input
           type="date"
           value={filters.dateFrom}
