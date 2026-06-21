@@ -8,7 +8,7 @@ type EventBucket = 'current' | 'upcoming' | 'reports'
 function selectByBucket(events: EventEntity[], bucket: EventBucket) {
   const now = new Date()
 
-  return events.filter((event) => {
+  const filtered = events.filter((event) => {
     const start = new Date(event.startAt)
     const end = new Date(event.endAt)
 
@@ -16,6 +16,14 @@ function selectByBucket(events: EventEntity[], bucket: EventBucket) {
     if (bucket === 'upcoming') return start > now
     return end < now
   })
+
+  if (bucket === 'upcoming') {
+    return [...filtered].sort(
+      (a, b) => new Date(a.startAt).getTime() - new Date(b.startAt).getTime(),
+    )
+  }
+
+  return filtered
 }
 
 export function useEvents(bucket: EventBucket) {

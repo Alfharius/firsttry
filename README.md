@@ -28,8 +28,9 @@ cd firsttry-api
 API: http://localhost:8000/api
 
 Тестовые пользователи:
-- Менеджер: `aruzhan@events.kz` / `password`
-- Клиент: `client@events.kz` / `password`
+Тестовые пользователи (пароль `password`):
+- Менеджер: `manager@click2mice.ru`
+- Клиенты: по 3 на компанию, например `client@vector-events.ru` (ООО «Вектор Событий»); всего 6 вымышленных компаний, 50 мероприятий
 
 ## Frontend
 
@@ -49,7 +50,7 @@ Vite проксирует `/api` на `http://localhost:8000`.
 
 ## Проверка
 
-1. Войти как `aruzhan@events.kz`
+1. Войти как `manager@click2mice.ru`
 2. Страницы `/current`, `/upcoming`, `/reports` показывают 4 события из Postgres
 3. Профиль сохраняется, смена пароля работает
 4. Excel-выгрузка на странице отчётов

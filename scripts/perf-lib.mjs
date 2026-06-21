@@ -95,7 +95,9 @@ export function aggregateByMonth(events, metric = 'priceWithVat') {
 
 const TYPES = ['Конференция', 'Мастер-класс', 'Встреча']
 const CATEGORIES = ['ИТ', 'HR', 'Дизайн', 'Маркетинг', 'Финансы']
-const LOCATIONS = ['Алматы', 'Астана', 'Шымкент', 'Караганда']
+const CITIES = ['Москва', 'Санкт-Петербург', 'Казань', 'Чебоксары', 'Нижний Новгород', 'Екатеринбург', 'Новосибирск', 'Сочи']
+const VENUES = ['«Атриум Норд»', '«Белая линия»', '«Кедровый двор»', '«Волга Пойнт»', '«Гранит»', '«Урал Виста»', '«Сибирь Хаб»', '«Приморский арх»']
+const LOCATIONS = CITIES.map((city, i) => `${city}, зал ${VENUES[i % VENUES.length]}`)
 
 export function generateEvents(count) {
   const events = []

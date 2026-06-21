@@ -2,9 +2,9 @@ import { apiRequest, getApiUrl } from '../../lib/apiClient'
 import type { UserProfile } from '../../types/domain'
 
 const fallbackProfile: UserProfile = {
-  fullName: 'Aruzhan Omarova',
-  email: 'aruzhan@events.kz',
-  position: 'Event Manager',
+  fullName: 'Мария Иванова',
+  email: 'manager@click2mice.ru',
+  position: 'Менеджер по мероприятиям',
   role: 'manager',
   company: null,
 }
