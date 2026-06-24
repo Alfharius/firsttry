@@ -42,7 +42,7 @@ export function RegisterPage() {
   })
 
   return (
-    <section className="mx-auto mt-16 max-w-md rounded-xl border border-slate-200 bg-white p-6">
+    <section className="mx-4 mt-8 max-w-md rounded-xl border border-slate-200 bg-white px-4 py-6 sm:mx-auto sm:mt-16 sm:px-6">
       <h1 className="mb-5 text-2xl font-semibold">Регистрация</h1>
       <form
         className="grid gap-3"
@@ -88,7 +88,7 @@ export function RegisterPage() {
         <button
           type="submit"
           disabled={registerMutation.isPending}
-          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white"
+          className="min-h-11 w-full rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white sm:min-h-0 sm:w-auto"
         >
           {registerMutation.isPending ? 'Создаем...' : 'Создать аккаунт'}
         </button>

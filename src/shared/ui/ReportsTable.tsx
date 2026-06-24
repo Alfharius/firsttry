@@ -174,7 +174,7 @@ export function ReportsTable({ events, onRowClick }: ReportsTableProps) {
   return (
     <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
       <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 p-3">
-        <span className="text-sm font-medium text-slate-700">Столбцы:</span>
+        <span className="w-full text-sm font-medium text-slate-700 sm:w-auto">Столбцы:</span>
         {(Object.keys(columnLabels) as ColumnKey[]).map((column) => {
           const active = visibleColumns.includes(column)
           return (
@@ -182,7 +182,7 @@ export function ReportsTable({ events, onRowClick }: ReportsTableProps) {
               key={column}
               type="button"
               onClick={() => toggleColumn(column)}
-              className={`rounded-full px-3 py-1 text-xs ${
+              className={`min-h-9 rounded-full px-3 py-1.5 text-xs ${
                 active ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-500'
               }`}
             >
@@ -192,7 +192,30 @@ export function ReportsTable({ events, onRowClick }: ReportsTableProps) {
         })}
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="space-y-2 p-3 md:hidden">
+        {pageRows.map((event) => (
+          <button
+            key={event.id}
+            type="button"
+            onClick={() => onRowClick?.(event)}
+            className="w-full rounded-lg border border-slate-200 bg-slate-50 p-3 text-left transition hover:bg-slate-100"
+          >
+            <p className="font-medium text-slate-900">{event.title}</p>
+            <p className="mt-1 text-xs text-slate-600">
+              {event.type} · {event.category}
+            </p>
+            <p className="mt-1 text-xs text-slate-600">{formatDateTime(event.startAt)}</p>
+            <p className="mt-2 text-sm font-semibold text-slate-800">
+              Итого: {formatRub(event.priceWithVat)} ₽
+            </p>
+          </button>
+        ))}
+        {!pageRows.length && (
+          <p className="py-4 text-center text-sm text-slate-500">Нет данных для отображения</p>
+        )}
+      </div>
+
+      <div className="hidden overflow-x-auto md:block">
         <table className="w-full min-w-max text-left text-sm">
           <thead className="bg-slate-100">
             <tr>
@@ -235,21 +258,21 @@ export function ReportsTable({ events, onRowClick }: ReportsTableProps) {
         </table>
       </div>
 
-      <div className="flex items-center justify-between border-t border-slate-200 p-3">
+      <div className="flex flex-col gap-2 border-t border-slate-200 p-3 sm:flex-row sm:items-center sm:justify-between">
         <button
           type="button"
-          className="rounded bg-slate-100 px-3 py-1 disabled:opacity-50"
+          className="min-h-11 rounded bg-slate-100 px-4 py-2 text-sm disabled:opacity-50 sm:min-h-0 sm:px-3 sm:py-1"
           disabled={currentPage <= 1}
           onClick={() => setPage((prev) => prev - 1)}
         >
           Назад
         </button>
-        <div className="text-sm text-slate-600">
+        <div className="text-center text-sm text-slate-600">
           Страница {currentPage} из {totalPages}
         </div>
         <button
           type="button"
-          className="rounded bg-slate-100 px-3 py-1 disabled:opacity-50"
+          className="min-h-11 rounded bg-slate-100 px-4 py-2 text-sm disabled:opacity-50 sm:min-h-0 sm:px-3 sm:py-1"
           disabled={currentPage >= totalPages}
           onClick={() => setPage((prev) => prev + 1)}
         >

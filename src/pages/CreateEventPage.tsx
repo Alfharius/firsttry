@@ -244,7 +244,7 @@ export function CreateEventPage() {
       />
 
       <form
-        className="grid gap-4 rounded-xl border border-slate-200 bg-white p-5"
+        className="grid gap-4 rounded-xl border border-slate-200 bg-white p-4 sm:p-5"
         onSubmit={form.handleSubmit((values) => {
           setMessage('')
           if (!imageFile) {
@@ -401,7 +401,7 @@ export function CreateEventPage() {
         <button
           type="submit"
           disabled={createMutation.isPending}
-          className="w-fit rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white"
+          className="w-full min-h-11 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white sm:w-fit"
         >
           {createMutation.isPending ? 'Создаём...' : 'Создать мероприятие'}
         </button>

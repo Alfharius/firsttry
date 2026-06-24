@@ -88,7 +88,7 @@ export function ProfilePage() {
         description="Редактирование основной информации и смена пароля."
       />
 
-      <div className="grid gap-3 rounded-xl border border-slate-200 bg-white p-5">
+      <div className="grid gap-3 rounded-xl border border-slate-200 bg-white p-4 sm:p-5">
         <h3 className="text-lg font-semibold">Роль и компания</h3>
         <p className="text-sm text-slate-700">
           <span className="font-medium">Роль:</span> {profileQuery.isLoading ? '...' : roleLabel}
@@ -102,7 +102,7 @@ export function ProfilePage() {
       </div>
 
       <form
-        className="grid gap-4 rounded-xl border border-slate-200 bg-white p-5"
+        className="grid gap-4 rounded-xl border border-slate-200 bg-white p-4 sm:p-5"
         onSubmit={profileForm.handleSubmit((values) => {
           setProfileMessage('')
           updateProfileMutation.mutate(values)
@@ -136,7 +136,7 @@ export function ProfilePage() {
         <button
           type="submit"
           disabled={updateProfileMutation.isPending || profileQuery.isLoading}
-          className="w-fit rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white"
+          className="w-full min-h-11 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white sm:w-fit"
         >
           {updateProfileMutation.isPending ? 'Сохраняем...' : 'Сохранить профиль'}
         </button>
@@ -144,7 +144,7 @@ export function ProfilePage() {
       </form>
 
       <form
-        className="grid gap-4 rounded-xl border border-slate-200 bg-white p-5"
+        className="grid gap-4 rounded-xl border border-slate-200 bg-white p-4 sm:p-5"
         onSubmit={passwordForm.handleSubmit((values) => {
           setPasswordMessage('')
           passwordMutation.mutate({
@@ -188,7 +188,7 @@ export function ProfilePage() {
         <button
           type="submit"
           disabled={passwordMutation.isPending}
-          className="w-fit rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white"
+          className="w-full min-h-11 rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white sm:w-fit"
         >
           {passwordMutation.isPending ? 'Меняем...' : 'Изменить пароль'}
         </button>
@@ -196,13 +196,13 @@ export function ProfilePage() {
       </form>
 
       <form
-        className="grid gap-4 rounded-xl border border-slate-200 bg-white p-5">
+        className="grid gap-4 rounded-xl border border-slate-200 bg-white p-4 sm:p-5">
 
         <h3 className="text-lg font-semibold">Выход из аккаунта</h3>
         <button
           type="button"
           onClick={() => void logout()}
-          className="w-fit rounded-lg bg-black px-4 py-2 text-sm font-medium text-white"
+          className="w-full min-h-11 rounded-lg bg-black px-4 py-2 text-sm font-medium text-white sm:w-fit"
         >
           Выйти
         </button>

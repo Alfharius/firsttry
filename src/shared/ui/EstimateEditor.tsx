@@ -100,7 +100,7 @@ export function EstimateEditor({ items, onChange }: EstimateEditorProps) {
               onChange={(event) => updateItem(item.id, { netto: parseNetto(event.target.value) })}
             />
             {item.locked ? (
-              <span className="hidden text-xs text-slate-400 sm:block">Обязательная</span>
+              <span className="text-xs text-slate-400">Обязательная</span>
             ) : (
               <button
                 type="button"

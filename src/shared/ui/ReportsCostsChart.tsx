@@ -111,17 +111,17 @@ export function ReportsCostsChart({ events }: ReportsCostsChartProps) {
         ))}
       </div>
 
-      <div className="h-[320px] w-full min-h-[280px]">
+      <div className="h-[240px] w-full min-h-[220px] sm:h-[320px]">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} margin={{ top: 8, right: 8, left: 8, bottom: 8 }}>
+          <BarChart data={data} margin={{ top: 8, right: 4, left: 0, bottom: 8 }}>
             <CartesianGrid strokeDasharray="3 3" className="stroke-slate-200" />
             <XAxis
               dataKey="label"
-              tick={{ fontSize: 12, fill: '#64748b' }}
+              tick={{ fontSize: 10, fill: '#64748b' }}
               interval={0}
-              angle={-25}
+              angle={-35}
               textAnchor="end"
-              height={70}
+              height={60}
             />
             <YAxis
               tick={{ fontSize: 12, fill: '#64748b' }}

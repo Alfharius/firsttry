@@ -19,13 +19,13 @@ export function EventFilters({
   onClear,
 }: EventFiltersProps) {
   return (
-    <section className="space-y-3 rounded-xl border border-slate-200 bg-white p-4">
-      <div className="grid gap-3 md:grid-cols-3 xl:grid-cols-7">
+    <section className="space-y-3 rounded-xl border border-slate-200 bg-white p-3 sm:p-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         <input
           value={filters.q}
           onChange={(event) => onChange('q', event.target.value)}
           placeholder="Поиск по названию"
-          className="rounded-lg border border-slate-300 px-3 py-2 text-sm"
+          className="min-h-11 rounded-lg border border-slate-300 px-3 py-2 text-sm sm:col-span-2 lg:col-span-3"
         />
         <Select value={filters.type} onChange={(event) => onChange('type', event.target.value)}>
           <option value="">Все типы</option>
@@ -61,23 +61,21 @@ export function EventFilters({
           type="date"
           value={filters.dateFrom}
           onChange={(event) => onChange('dateFrom', event.target.value)}
-          className="rounded-lg border border-slate-300 px-3 py-2 text-sm"
+          className="min-h-11 rounded-lg border border-slate-300 px-3 py-2 text-sm"
         />
-        <div className="flex gap-2">
-          <input
-            type="date"
-            value={filters.dateTo}
-            onChange={(event) => onChange('dateTo', event.target.value)}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
-          />
-          <button
-            type="button"
-            onClick={onClear}
-            className="rounded-lg border border-slate-300 px-3 py-2 text-sm"
-          >
-            Сброс
-          </button>
-        </div>
+        <input
+          type="date"
+          value={filters.dateTo}
+          onChange={(event) => onChange('dateTo', event.target.value)}
+          className="min-h-11 rounded-lg border border-slate-300 px-3 py-2 text-sm"
+        />
+        <button
+          type="button"
+          onClick={onClear}
+          className="min-h-11 rounded-lg border border-slate-300 px-3 py-2 text-sm sm:col-span-2 lg:col-span-1"
+        >
+          Сброс
+        </button>
       </div>
 
       {activeFilters.length > 0 && (
