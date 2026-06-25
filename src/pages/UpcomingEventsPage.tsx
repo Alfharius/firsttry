@@ -15,10 +15,7 @@ export function UpcomingEventsPage() {
 
   return (
     <section className='space-y-4'>
-      <PageHeader
-        title="Будущие мероприятия"
-        description="События с датой старта позже текущей даты."
-      />
+      <PageHeader title="Будущие мероприятия" />
       <EventFilters
         filters={filters}
         activeFilters={activeFilters}

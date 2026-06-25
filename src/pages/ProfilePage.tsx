@@ -83,10 +83,7 @@ export function ProfilePage() {
 
   return (
     <section className="space-y-8">
-      <PageHeader
-        title="Профиль пользователя"
-        description="Редактирование основной информации и смена пароля."
-      />
+      <PageHeader title="Профиль пользователя" />
 
       <div className="grid gap-3 rounded-xl border border-slate-200 bg-white p-4 sm:p-5">
         <h3 className="text-lg font-semibold">Роль и компания</h3>

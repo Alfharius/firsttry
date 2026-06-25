@@ -29,10 +29,7 @@ export function ReportsPage() {
   return (
     <section className="flex flex-col gap-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <PageHeader
-          title="Отчеты"
-          description="Прошедшие мероприятия: таблица, карточки и графики по месяцам."
-        />
+        <PageHeader title="Отчеты" />
         <button
           type="button"
           disabled={filtered.length === 0}

@@ -238,10 +238,7 @@ export function CreateEventPage() {
 
   return (
     <section className="space-y-6">
-      <PageHeader
-        title="Добавить мероприятие"
-        description="Создание нового мероприятия и назначение компании-клиента."
-      />
+      <PageHeader title="Добавить мероприятие" />
 
       <form
         className="grid gap-4 rounded-xl border border-slate-200 bg-white p-4 sm:p-5"

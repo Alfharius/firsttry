@@ -15,10 +15,7 @@ export function CurrentEventsPage() {
 
   return (
     <section className='space-y-4'>
-      <PageHeader
-        title="Проходящие мероприятия"
-        description="События, у которых текущая дата находится в диапазоне проведения."
-      />
+      <PageHeader title="Проходящие мероприятия" />
       <EventFilters
         filters={filters}
         activeFilters={activeFilters}
