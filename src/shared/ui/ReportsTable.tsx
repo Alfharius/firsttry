@@ -1,6 +1,7 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { formatRub } from '../lib/estimate'
 import type { EventEntity } from '../../types/domain'
+import { Select } from './Select'
 
 interface ReportsTableProps {
   events: EventEntity[]
@@ -91,6 +92,8 @@ const columnLabels = Object.fromEntries(columns.map((c) => [c.key, c.label])) as
 
 const defaultColumns: ColumnKey[] = columns.map((c) => c.key)
 
+const PAGE_SIZE_OPTIONS = [5, 10, 25, 50] as const
+
 function compareEvents(a: EventEntity, b: EventEntity, sortBy: SortBy) {
   switch (sortBy) {
     case 'title':
@@ -133,8 +136,8 @@ export function ReportsTable({ events, onRowClick }: ReportsTableProps) {
   const [sortBy, setSortBy] = useState<SortBy>('startAt')
   const [ascending, setAscending] = useState(false)
   const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState<(typeof PAGE_SIZE_OPTIONS)[number]>(5)
   const [visibleColumns, setVisibleColumns] = useState<ColumnKey[]>(defaultColumns)
-  const pageSize = 5
 
   const visibleColumnDefs = useMemo(
     () => columns.filter((column) => visibleColumns.includes(column.key)),
@@ -150,6 +153,13 @@ export function ReportsTable({ events, onRowClick }: ReportsTableProps) {
   const totalPages = Math.max(1, Math.ceil(sorted.length / pageSize))
   const currentPage = Math.min(page, totalPages)
   const pageRows = sorted.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+  const rangeStart = sorted.length === 0 ? 0 : (currentPage - 1) * pageSize + 1
+  const rangeEnd = Math.min(currentPage * pageSize, sorted.length)
+
+  function handlePageSizeChange(value: string) {
+    setPageSize(Number(value) as (typeof PAGE_SIZE_OPTIONS)[number])
+    setPage(1)
+  }
 
   function toggleColumn(column: ColumnKey) {
     setVisibleColumns((prev) => {
@@ -157,7 +167,7 @@ export function ReportsTable({ events, onRowClick }: ReportsTableProps) {
         if (prev.length === 1) return prev
         return prev.filter((item) => item !== column)
       }
-      return [...prev, column]
+      return columns.map((item) => item.key).filter((key) => prev.includes(key) || key === column)
     })
   }
 
@@ -200,14 +210,17 @@ export function ReportsTable({ events, onRowClick }: ReportsTableProps) {
             onClick={() => onRowClick?.(event)}
             className="w-full rounded-lg border border-slate-200 bg-slate-50 p-3 text-left transition hover:bg-slate-100"
           >
-            <p className="font-medium text-slate-900">{event.title}</p>
-            <p className="mt-1 text-xs text-slate-600">
-              {event.type} · {event.category}
-            </p>
-            <p className="mt-1 text-xs text-slate-600">{formatDateTime(event.startAt)}</p>
-            <p className="mt-2 text-sm font-semibold text-slate-800">
-              Итого: {formatRub(event.priceWithVat)} ₽
-            </p>
+            <dl className="space-y-2">
+              {visibleColumnDefs.map((column) => (
+                <div
+                  key={column.key}
+                  className="grid grid-cols-1 gap-0.5 border-b border-slate-200/80 pb-2 last:border-0 last:pb-0 sm:grid-cols-[minmax(0,9.5rem)_1fr] sm:items-baseline sm:gap-x-3"
+                >
+                  <dt className="text-xs font-semibold text-slate-600">{column.label}</dt>
+                  <dd className="text-sm text-slate-900 break-words">{column.render(event)}</dd>
+                </div>
+              ))}
+            </dl>
           </button>
         ))}
         {!pageRows.length && (
@@ -254,11 +267,21 @@ export function ReportsTable({ events, onRowClick }: ReportsTableProps) {
                 ))}
               </tr>
             ))}
+            {!pageRows.length && (
+              <tr>
+                <td
+                  colSpan={visibleColumnDefs.length}
+                  className="px-3 py-6 text-center text-sm text-slate-500"
+                >
+                  Нет данных для отображения
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
 
-      <div className="flex flex-col gap-2 border-t border-slate-200 p-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 border-t border-slate-200 p-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
         <button
           type="button"
           className="min-h-11 rounded bg-slate-100 px-4 py-2 text-sm disabled:opacity-50 sm:min-h-0 sm:px-3 sm:py-1"
@@ -267,8 +290,27 @@ export function ReportsTable({ events, onRowClick }: ReportsTableProps) {
         >
           Назад
         </button>
-        <div className="text-center text-sm text-slate-600">
-          Страница {currentPage} из {totalPages}
+        <div className="flex flex-col items-center gap-2 sm:flex-row sm:gap-4">
+          <div className="text-center text-sm text-slate-600">
+            {sorted.length > 0
+              ? `${rangeStart}–${rangeEnd} из ${sorted.length} · страница ${currentPage} из ${totalPages}`
+              : `Страница ${currentPage} из ${totalPages}`}
+          </div>
+          <label className="flex items-center gap-2 text-sm text-slate-600">
+            <span className="whitespace-nowrap">Строк на странице:</span>
+            <Select
+              value={pageSize}
+              onChange={(event) => handlePageSizeChange(event.target.value)}
+              className="min-h-9 w-20 py-1 pr-8"
+              aria-label="Строк на странице"
+            >
+              {PAGE_SIZE_OPTIONS.map((size) => (
+                <option key={size} value={size}>
+                  {size}
+                </option>
+              ))}
+            </Select>
+          </label>
         </div>
         <button
           type="button"

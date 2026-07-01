@@ -14,7 +14,7 @@ export function CurrentEventsPage() {
     useEventFilters(data, 'current')
 
   return (
-    <section className='space-y-4'>
+    <section>
       <PageHeader title="Проходящие мероприятия" />
       <EventFilters
         filters={filters}

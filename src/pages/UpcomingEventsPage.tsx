@@ -14,7 +14,7 @@ export function UpcomingEventsPage() {
     useEventFilters(data, 'upcoming')
 
   return (
-    <section className='space-y-4'>
+    <section>
       <PageHeader title="Будущие мероприятия" />
       <EventFilters
         filters={filters}
