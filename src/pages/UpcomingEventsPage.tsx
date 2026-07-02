@@ -2,10 +2,10 @@ import { useState } from 'react'
 import { useEvents } from '../features/events/useEvents'
 import { useEventFilters } from '../features/events/useEventFilters'
 import type { EventEntity } from '../types/domain'
-import { EventCard } from '../shared/ui/EventCard'
 import { EventModal } from '../shared/ui/EventModal'
 import { PageHeader } from '../shared/ui/PageHeader'
 import { EventFilters } from '../shared/ui/EventFilters'
+import { PaginatedEventList } from '../shared/ui/PaginatedEventList'
 
 export function UpcomingEventsPage() {
   const { data = [] } = useEvents('upcoming')
@@ -14,7 +14,7 @@ export function UpcomingEventsPage() {
     useEventFilters(data, 'upcoming')
 
   return (
-    <section>
+    <section className="flex flex-col gap-4">
       <PageHeader title="Будущие мероприятия" />
       <EventFilters
         filters={filters}
@@ -24,16 +24,11 @@ export function UpcomingEventsPage() {
         onRemoveFilter={(key) => updateFilter(key, '')}
         onClear={clearFilters}
       />
-      <div className="space-y-2">
-        {filtered.map((event) => (
-          <EventCard key={event.id} event={event} onOpenDetails={setSelected} />
-        ))}
-      </div>
-      {!filtered.length && (
-        <p className="rounded-lg border border-dashed border-slate-300 bg-white p-4 text-sm text-slate-500">
-          Будущие мероприятия не найдены.
-        </p>
-      )}
+      <PaginatedEventList
+        events={filtered}
+        emptyMessage="Будущие мероприятия не найдены."
+        onOpenDetails={setSelected}
+      />
       <EventModal event={selected} onClose={() => setSelected(null)} />
     </section>
   )

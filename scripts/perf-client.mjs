@@ -7,6 +7,8 @@ import {
   bench,
   filterEvents,
   generateEvents,
+  paginateItems,
+  processEventList,
   selectByBucket,
   sortEvents,
 } from './perf-lib.mjs'
@@ -46,6 +48,21 @@ for (const size of SIZES) {
     test: 'filter_events',
     n: size,
     ...bench(() => filterEvents(events, filters), ITERATIONS),
+  })
+
+  results.push({
+    test: 'paginate_list',
+    n: size,
+    ...bench(() => {
+      const filtered = filterEvents(selectByBucket(events, 'upcoming'), filters)
+      paginateItems(filtered, 3, 10)
+    }, ITERATIONS),
+  })
+
+  results.push({
+    test: 'event_list_pipeline',
+    n: size,
+    ...bench(() => processEventList(events, 'upcoming', filters, 2, 10), ITERATIONS),
   })
 
   if (size <= 2000) {

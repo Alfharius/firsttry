@@ -9,6 +9,7 @@ import { PageHeader } from '../shared/ui/PageHeader'
 import { ReportsTable } from '../shared/ui/ReportsTable'
 import { EventFilters } from '../shared/ui/EventFilters'
 import { ReportsCostsChart } from '../shared/ui/ReportsCostsChart'
+import { PaginatedEventList } from '../shared/ui/PaginatedEventList'
 import clsx from 'clsx'
 
 type ReportsTab = 'data' | 'chart'
@@ -86,11 +87,11 @@ export function ReportsPage() {
               <EventCard event={selectedFromTable} onOpenDetails={setSelected} />
             </div>
           )}
-          <div className="space-y-2">
-            {filtered.map((event) => (
-              <EventCard key={event.id} event={event} onOpenDetails={setSelected} />
-            ))}
-          </div>
+          <PaginatedEventList
+            events={filtered}
+            emptyMessage="Нет завершённых мероприятий для отображения."
+            onOpenDetails={setSelected}
+          />
         </>
       )}
 

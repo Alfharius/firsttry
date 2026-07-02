@@ -2,13 +2,39 @@
 
 export function selectByBucket(events, bucket) {
   const now = new Date()
-  return events.filter((event) => {
+  const filtered = events.filter((event) => {
     const start = new Date(event.startAt)
     const end = new Date(event.endAt)
     if (bucket === 'current') return start <= now && end >= now
     if (bucket === 'upcoming') return start > now
     return end < now
   })
+
+  if (bucket === 'upcoming') {
+    return [...filtered].sort(
+      (a, b) => new Date(a.startAt).getTime() - new Date(b.startAt).getTime(),
+    )
+  }
+
+  return filtered
+}
+
+export function paginateItems(items, page, pageSize) {
+  const totalPages = Math.max(1, Math.ceil(items.length / pageSize))
+  const currentPage = Math.min(page, totalPages)
+  return {
+    pageItems: items.slice((currentPage - 1) * pageSize, currentPage * pageSize),
+    totalPages,
+    currentPage,
+    total: items.length,
+  }
+}
+
+/** Полный клиентский пайплайн списка мероприятий: bucket → filter → paginate */
+export function processEventList(events, bucket, filters, page = 1, pageSize = 10) {
+  const bucketed = selectByBucket(events, bucket)
+  const filtered = filterEvents(bucketed, filters)
+  return paginateItems(filtered, page, pageSize)
 }
 
 function toInputDate(value) {

@@ -1,7 +1,8 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { formatRub } from '../lib/estimate'
 import type { EventEntity } from '../../types/domain'
-import { Select } from './Select'
+import { usePagination } from '../hooks/usePagination'
+import { ListPagination } from './ListPagination'
 
 interface ReportsTableProps {
   events: EventEntity[]
@@ -92,8 +93,6 @@ const columnLabels = Object.fromEntries(columns.map((c) => [c.key, c.label])) as
 
 const defaultColumns: ColumnKey[] = columns.map((c) => c.key)
 
-const PAGE_SIZE_OPTIONS = [5, 10, 25, 50] as const
-
 function compareEvents(a: EventEntity, b: EventEntity, sortBy: SortBy) {
   switch (sortBy) {
     case 'title':
@@ -135,14 +134,7 @@ function SortArrow({ ascending }: { ascending: boolean }) {
 export function ReportsTable({ events, onRowClick }: ReportsTableProps) {
   const [sortBy, setSortBy] = useState<SortBy>('startAt')
   const [ascending, setAscending] = useState(false)
-  const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState<(typeof PAGE_SIZE_OPTIONS)[number]>(5)
   const [visibleColumns, setVisibleColumns] = useState<ColumnKey[]>(defaultColumns)
-
-  const visibleColumnDefs = useMemo(
-    () => columns.filter((column) => visibleColumns.includes(column.key)),
-    [visibleColumns],
-  )
 
   const sorted = useMemo(() => {
     const copy = [...events]
@@ -150,16 +142,13 @@ export function ReportsTable({ events, onRowClick }: ReportsTableProps) {
     return ascending ? copy : copy.reverse()
   }, [ascending, events, sortBy])
 
-  const totalPages = Math.max(1, Math.ceil(sorted.length / pageSize))
-  const currentPage = Math.min(page, totalPages)
-  const pageRows = sorted.slice((currentPage - 1) * pageSize, currentPage * pageSize)
-  const rangeStart = sorted.length === 0 ? 0 : (currentPage - 1) * pageSize + 1
-  const rangeEnd = Math.min(currentPage * pageSize, sorted.length)
+  const pagination = usePagination(sorted, 5)
+  const pageRows = pagination.pageItems
 
-  function handlePageSizeChange(value: string) {
-    setPageSize(Number(value) as (typeof PAGE_SIZE_OPTIONS)[number])
-    setPage(1)
-  }
+  const visibleColumnDefs = useMemo(
+    () => columns.filter((column) => visibleColumns.includes(column.key)),
+    [visibleColumns],
+  )
 
   function toggleColumn(column: ColumnKey) {
     setVisibleColumns((prev) => {
@@ -178,7 +167,7 @@ export function ReportsTable({ events, onRowClick }: ReportsTableProps) {
       setSortBy(column)
       setAscending(true)
     }
-    setPage(1)
+    pagination.setPage(1)
   }
 
   return (
@@ -281,46 +270,17 @@ export function ReportsTable({ events, onRowClick }: ReportsTableProps) {
         </table>
       </div>
 
-      <div className="flex flex-col gap-3 border-t border-slate-200 p-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
-        <button
-          type="button"
-          className="min-h-11 rounded bg-slate-100 px-4 py-2 text-sm disabled:opacity-50 sm:min-h-0 sm:px-3 sm:py-1"
-          disabled={currentPage <= 1}
-          onClick={() => setPage((prev) => prev - 1)}
-        >
-          Назад
-        </button>
-        <div className="flex flex-col items-center gap-2 sm:flex-row sm:gap-4">
-          <div className="text-center text-sm text-slate-600">
-            {sorted.length > 0
-              ? `${rangeStart}–${rangeEnd} из ${sorted.length} · страница ${currentPage} из ${totalPages}`
-              : `Страница ${currentPage} из ${totalPages}`}
-          </div>
-          <label className="flex items-center gap-2 text-sm text-slate-600">
-            <span className="whitespace-nowrap">Строк на странице:</span>
-            <Select
-              value={pageSize}
-              onChange={(event) => handlePageSizeChange(event.target.value)}
-              className="min-h-9 w-20 py-1 pr-8"
-              aria-label="Строк на странице"
-            >
-              {PAGE_SIZE_OPTIONS.map((size) => (
-                <option key={size} value={size}>
-                  {size}
-                </option>
-              ))}
-            </Select>
-          </label>
-        </div>
-        <button
-          type="button"
-          className="min-h-11 rounded bg-slate-100 px-4 py-2 text-sm disabled:opacity-50 sm:min-h-0 sm:px-3 sm:py-1"
-          disabled={currentPage >= totalPages}
-          onClick={() => setPage((prev) => prev + 1)}
-        >
-          Вперед
-        </button>
-      </div>
+      <ListPagination
+        embedded
+        page={pagination.page}
+        totalPages={pagination.totalPages}
+        rangeStart={pagination.rangeStart}
+        rangeEnd={pagination.rangeEnd}
+        total={pagination.total}
+        pageSize={pagination.pageSize}
+        onPageChange={pagination.setPage}
+        onPageSizeChange={pagination.handlePageSizeChange}
+      />
     </div>
   )
 }
